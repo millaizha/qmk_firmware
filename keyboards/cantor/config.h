@@ -29,6 +29,13 @@
 #define BOOTMAGIC_LITE_ROW_RIGHT    4
 #define BOOTMAGIC_LITE_COLUMN_RIGHT 5
 
+// Tap hold configurations
+#define TAPPING_TERM 270
+#define IGNORE_MOD_TAP_INTERRUPT
+#define TAPPING_FORCE_HOLD
+
+#define SPLIT_USB_DETECT
+
 /*
  * Feature disable options
  *  These options are also useful to firmware size reduction.
