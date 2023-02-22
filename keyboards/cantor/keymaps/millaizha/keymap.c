@@ -90,14 +90,17 @@ enum
 // Multi tap dance functions
 int cur_dance(qk_tap_dance_state_t *state) 
 {
-    if (state->count == 1) {
+    if (state->count == 1) 
+    {
         if (state->interrupted || !state->pressed) return TD_SINGLE_TAP;
         else return TD_SINGLE_HOLD;
-    } else if (state->count == 2) {
+    } else if (state->count == 2) 
+    {
         if (state->interrupted) return TD_DOUBLE_SINGLE_TAP;
         else if (state->pressed) return TD_DOUBLE_HOLD;
         else return TD_DOUBLE_TAP;
-    } else if (state->count == 3) {
+    } else if (state->count == 3) 
+    {
         if (state->interrupted || !state->pressed) return TD_TRIPLE_TAP;
         else return TD_TRIPLE_HOLD;
     } else return 7;
@@ -107,18 +110,22 @@ int cur_dance(qk_tap_dance_state_t *state)
 void td_game_chat_finished(qk_tap_dance_state_t *state, void *user_data) 
 {
     layer_on(7);
-    if (state->count == 1) {
+    if (state->count == 1) 
+    {
         register_code16(KC_ENT);
-    } else {
+    } else 
+    {
         register_code16(LSFT(KC_ENT));
     }
 };
 
 void td_game_chat_reset(qk_tap_dance_state_t *state, void *user_data) 
 {
-    if (state->count == 1) {
+    if (state->count == 1) 
+    {
         unregister_code16(KC_ENT);
-    } else {
+    } else 
+    {
         unregister_code16(LSFT(KC_ENT));
     }
 };
@@ -128,7 +135,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
     switch (keycode) {
         case GAME:
-            if (record->event.pressed) {
+            if (record->event.pressed) 
+            {
                 register_code16(KC_ENT);
                 layer_off(7);
                 unregister_code16(KC_ENT);
@@ -148,7 +156,8 @@ static td_tap_t lol_tap_state =
 void td_lol_finished(qk_tap_dance_state_t *state, void *user_data) 
 {
     lol_tap_state.state = cur_dance(state);
-    switch (lol_tap_state.state) {
+    switch (lol_tap_state.state) 
+    {
         case TD_SINGLE_TAP: register_code(KC_P); break;
         case TD_SINGLE_HOLD: register_code(KC_TAB); break;
         case TD_DOUBLE_TAP: register_code(KC_ESC); break;
@@ -158,7 +167,8 @@ void td_lol_finished(qk_tap_dance_state_t *state, void *user_data)
 
 void td_lol_reset(qk_tap_dance_state_t *state, void *user_data) 
 {
-    switch (lol_tap_state.state) {
+    switch (lol_tap_state.state) 
+    {
         case TD_SINGLE_TAP: unregister_code(KC_P); break;
         case TD_SINGLE_HOLD: unregister_code(KC_TAB); break;
         case TD_DOUBLE_TAP: unregister_code(KC_ESC); break;
@@ -178,7 +188,7 @@ qk_tap_dance_action_t tap_dance_actions[] =
     [PASTE_V] = ACTION_TAP_DANCE_DOUBLE(KC_V, LCTL(KC_V)),
     // Tap once for Enter, twice for Shift + Enter
     [GAME_CHAT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_game_chat_finished, td_game_chat_reset),
-    // Tap once for Grave, twice for Escape. Hold for Tab, tap + hold for MO(10)
+    // Tap once for P, twice for Escape. Hold for Tab, tap + hold for MO(10)
     [LOL_T_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_lol_finished, td_lol_reset),
 };
 
