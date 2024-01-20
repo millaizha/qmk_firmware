@@ -1,0 +1,3 @@
+#define TAPPING_TERM 350
+
+#define TAPPING_FORCE_HOLD
