@@ -1,6 +1,9 @@
 #define TAPPING_TERM 300
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAPPING_FORCE_HOLD
+#define PERMISSIVE_HOLD
+
+#define OLED_BRIGHTNESS 100
 
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION  
@@ -11,7 +14,8 @@
 
 #ifndef NO_DEBUG
 #define NO_DEBUG
-#endif // !NO_DEBUG
+#endif 
 #if !defined(NO_PRINT) && !defined(CONSOLE_ENABLE)
 #define NO_PRINT
-#endif // !NO_PRINT
+#endif 
+
