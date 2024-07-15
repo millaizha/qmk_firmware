@@ -12,6 +12,9 @@ char wpm_str[10];
 #define QWERTY 3
 #define WINMISC 4
 #define QWRTARR 5
+#define LOLGAME 6
+#define LOLCHAT 7
+#define LOLNUM 8
 
 enum custom_keycodes {
     N_TILDE = SAFE_RANGE,
@@ -24,17 +27,42 @@ enum {
     CUT_X,
     PASTE_V,
     UNDO_Z,
-    CLMK
+    GAME,
+    CHAT
 };
 
+// Tap dance config for game team/all chat
+void td_game_chat_finished(tap_dance_state_t *state, void *user_data) 
+{
+    layer_on(7);
+    if (state->count == 1) 
+    {
+        register_code16(KC_ENT);
+    } else 
+    {
+        register_code16(LSFT(KC_ENT));
+    }
+};
+
+void td_game_chat_reset(tap_dance_state_t *state, void *user_data) 
+{
+    if (state->count == 1) 
+    {
+        unregister_code16(KC_ENT);
+    } else 
+    {
+        unregister_code16(LSFT(KC_ENT));
+    }
+};
 
 // Tap dance definitions
-qk_tap_dance_action_t tap_dance_actions[] = 
+tap_dance_action_t tap_dance_actions[] = 
 {
     [COPY_Q] = ACTION_TAP_DANCE_DOUBLE(KC_Q, LCTL(KC_C)),
     [CUT_X] = ACTION_TAP_DANCE_DOUBLE(KC_X, LCTL(KC_X)),
     [PASTE_V] = ACTION_TAP_DANCE_DOUBLE(KC_V, LCTL(KC_V)),
-    [UNDO_Z] = ACTION_TAP_DANCE_DOUBLE(KC_Z, LCTL(KC_Z))
+    [UNDO_Z] = ACTION_TAP_DANCE_DOUBLE(KC_Z, LCTL(KC_Z)),
+    [CHAT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_game_chat_finished, td_game_chat_reset),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -107,40 +135,80 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
                                                      LT(4,KC_DEL),    KC_INS,                                KC_NO,       KC_TRNS 
                                                  //`--------------+--------------'                    `--------------+--------------'
-    )
+    ),
+[LOLGAME] = LAYOUT_reviung34(
+    //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
+            KC_1,        KC_2,         KC_3,         KC_4,         KC_5,                               KC_ESC,         KC_RALT,         KC_GRV,        LCTL(KC_1),        LCTL(KC_2), 
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
+           KC_Q,      KC_W,       KC_E,       KC_R,        KC_T,                              KC_TAB,      KC_VOLD,       KC_VOLU,      LCTL(KC_3),         LCTL(KC_4), 
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
+            KC_A,       KC_S,        KC_D,       KC_F,       KC_B,                              KC_P,      KC_MPRV,       KC_MPLY,       KC_MNXT,    LCTL(KC_5), 
+    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
+                                                     KC_SPC,    KC_LCTL,                                TD(CHAT),       TO(0) 
+                                                 //`--------------+--------------'                    `--------------+--------------'
+    ),
+[LOLCHAT] = LAYOUT_reviung34(
+    //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
+         TD(COPY_Q),       KC_W,          KC_F,          KC_P,         KC_B,                                KC_J,          KC_L,          KC_U,         KC_Y,        KC_QUOT, 
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
+        LGUI_T(KC_A),  LALT_T(KC_R),  LCTL_T(KC_S),  LSFT_T(KC_T),     KC_G,                                KC_M,     RSFT_T(KC_N),  RCTL_T(KC_E),  RALT_T(KC_I),  RGUI_T(KC_O), 
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
+         TD(UNDO_Z),    TD(CUT_X),        KC_C,          KC_D,      TD(PASTE_V),                            KC_K,          KC_H,        KC_COMM,        KC_DOT,      KC_SLSH, 
+    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------' 
+                                                    LT(8,KC_BSPC),    KC_TAB,                              GAME,     LT(2,KC_SPC)
+                                                 //`--------------+--------------'                    `--------------+--------------'
+    ),
+[LOLNUM] = LAYOUT_reviung34(
+    //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
+            KC_1,          KC_2,          KC_3,          KC_4,          KC_5,                               KC_6,          KC_7,          KC_8,         KC_9,          KC_0,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+          KC_LGUI,       KC_LALT,       KC_LCTL,        KC_LSFT,       KC_GRV,                             KC_SCLN,       KC_RSFT,       KC_RCTL,      KC_RALT,       KC_RGUI,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+          KC_BSLS,       KC_LBRC,       KC_LCBR,        KC_MINS,       KC_EQL,                             KC_PLUS,       KC_UNDS,       KC_RCBR,      KC_RBRC,       KC_PIPE,
+    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------' 
+                                                        KC_TRNS,       KC_NO,                              KC_COMM,    LT(4,KC_DOT)
+                                                 //`--------------+--------------'                    `--------------+--------------'
+    ),
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record){
-    switch (keycode)
-    {
-    case N_TILDE:
-        if(record->event.pressed){
-            register_code(KC_LALT);
-            register_code(KC_P1);
-            unregister_code(KC_P1);
-            register_code(KC_P6);
-            unregister_code(KC_P6);
-            register_code(KC_P4);
-            unregister_code(KC_P4);
-        }
-        else
-            unregister_code(KC_LALT);
-        break;
-    case N_CAPS_TILDE:
-        if(record->event.pressed){
-            register_code(KC_LALT);
-            register_code(KC_P0);
-            unregister_code(KC_P0);
-            register_code(KC_P2);
-            unregister_code(KC_P2);
-            register_code(KC_P0);
-            unregister_code(KC_P0);
-            register_code(KC_P9);
-            unregister_code(KC_P9);
-        }
-        else
-            unregister_code(KC_LALT);
-        break;
+    switch (keycode){
+        case N_TILDE:
+                register_code(KC_LALT);
+                register_code(KC_P1);
+            if(record->event.pressed){
+                unregister_code(KC_P1);
+                register_code(KC_P6);
+                unregister_code(KC_P6);
+                register_code(KC_P4);
+                unregister_code(KC_P4);
+            }
+            else
+                unregister_code(KC_LALT);
+            break;
+        case N_CAPS_TILDE:
+            if(record->event.pressed){
+                register_code(KC_LALT);
+                register_code(KC_P0);
+                unregister_code(KC_P0);
+                register_code(KC_P2);
+                unregister_code(KC_P2);
+                register_code(KC_P0);
+                unregister_code(KC_P0);
+                register_code(KC_P9);
+                unregister_code(KC_P9);
+            }
+            else
+                unregister_code(KC_LALT);
+            break;
+        case GAME:
+            if (record->event.pressed) 
+            {
+                register_code16(KC_ENT);
+                layer_off(7);
+                unregister_code16(KC_ENT);
+            }
+            break;
     }
     return true;
 };
@@ -236,7 +304,7 @@ bool oled_task_user() {
     render_anim();
 
     oled_set_cursor(0,0);
-    if (get_highest_layer(layer_state) == COLEMAK || get_highest_layer(layer_state) == CLMKNUM || get_highest_layer(layer_state) == CLMKARR || get_highest_layer(layer_state) == QWERTY || get_highest_layer(layer_state) == WINMISC || get_highest_layer(layer_state) == QWRTARR || get_highest_layer(layer_state) == QWRTNUM)
+    if (get_highest_layer(layer_state) == COLEMAK || get_highest_layer(layer_state) == NMBRLYR || get_highest_layer(layer_state) == CLMKARR || get_highest_layer(layer_state) == QWERTY || get_highest_layer(layer_state) == WINMISC || get_highest_layer(layer_state) == QWRTARR)
         oled_write("Windows", false); 
 
     oled_set_cursor(0, 1);
@@ -244,7 +312,7 @@ bool oled_task_user() {
         case COLEMAK :
             oled_write("Main", false);
             break;
-        case CLMKNUM :
+        case NMBRLYR :
             oled_write("Number", false);
             break;
         case CLMKARR :
@@ -256,14 +324,17 @@ bool oled_task_user() {
         case WINMISC :
             oled_write("Mouse/Media", false);
             break;
-        case QWRTNUM :
-            oled_write("Number", false);
-            break;
         case QWRTARR :
             oled_write("Function", false);
             break;
-        case WINGAME :
+        case LOLGAME :
             oled_write("Game", false);
+            break;
+        case LOLCHAT :
+            oled_write("Chat", false);
+            break;
+        case LOLNUM :
+            oled_write("Num Chat", false);
             break;
     }              
 
