@@ -1,4 +1,4 @@
-// reviung keymap by @millaizha 
+// reviung keymap by @millaizha
 
 #include QMK_KEYBOARD_H
 #include <stdio.h>
@@ -6,15 +6,19 @@
 char wpm_str[10];
 
 // layers
-#define COLEMAK 0
-#define NMBRLYR 1
-#define CLMKARR 2
-#define QWERTY 3
+#define WINCOLEMAK 0
+#define WINNMBRLYR 1
+#define WINCLMKARR 2
+#define WINQWERTY 3
 #define WINMISC 4
-#define QWRTARR 5
-#define LOLGAME 6
-#define LOLCHAT 7
-#define LOLNUM 8
+#define WINQWRTARR 5
+#define LINCOLEMAK 6
+#define LINNMBLYR 7
+#define LINARR 8
+#define LINMISC 9
+#define LOLGAME 10
+#define LOLCHAT 11
+#define LOLNUM 12
 
 enum custom_keycodes {
     N_TILDE = SAFE_RANGE,
@@ -31,32 +35,37 @@ enum {
     CHAT
 };
 
+// Tap dance config for hyprland commands
+void td_hyprland_key_finished(tap_dance_state_t *state, void *user_data)
+{
+
+}
 // Tap dance config for game team/all chat
-void td_game_chat_finished(tap_dance_state_t *state, void *user_data) 
+void td_game_chat_finished(tap_dance_state_t *state, void *user_data)
 {
     layer_on(7);
-    if (state->count == 1) 
+    if (state->count == 1)
     {
         register_code16(KC_ENT);
-    } else 
+    } else
     {
         register_code16(LSFT(KC_ENT));
     }
 };
 
-void td_game_chat_reset(tap_dance_state_t *state, void *user_data) 
+void td_game_chat_reset(tap_dance_state_t *state, void *user_data)
 {
-    if (state->count == 1) 
+    if (state->count == 1)
     {
         unregister_code16(KC_ENT);
-    } else 
+    } else
     {
         unregister_code16(LSFT(KC_ENT));
     }
 };
 
 // Tap dance definitions
-tap_dance_action_t tap_dance_actions[] = 
+tap_dance_action_t tap_dance_actions[] =
 {
     [COPY_Q] = ACTION_TAP_DANCE_DOUBLE(KC_Q, LCTL(KC_C)),
     [CUT_X] = ACTION_TAP_DANCE_DOUBLE(KC_X, LCTL(KC_X)),
@@ -67,94 +76,131 @@ tap_dance_action_t tap_dance_actions[] =
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-[COLEMAK] = LAYOUT_reviung34(
+[WINCOLEMAK] = LAYOUT_reviung34(
     //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
-         TD(COPY_Q),       KC_W,          KC_F,          KC_P,         KC_B,                                KC_J,          KC_L,          KC_U,         KC_Y,        KC_QUOT, 
-    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
-        LGUI_T(KC_A),  LALT_T(KC_R),  LCTL_T(KC_S),  LSFT_T(KC_T),     KC_G,                                KC_M,     RSFT_T(KC_N),  RCTL_T(KC_E),  RALT_T(KC_I),  RGUI_T(KC_O), 
-    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
-         TD(UNDO_Z),    TD(CUT_X),        KC_C,          KC_D,      TD(PASTE_V),                            KC_K,          KC_H,        KC_COMM,        KC_DOT,      KC_SLSH, 
-    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------' 
+         TD(COPY_Q),       KC_W,          KC_F,          KC_P,         KC_B,                                KC_J,          KC_L,          KC_U,         KC_Y,        KC_QUOT,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+        LGUI_T(KC_A),  LALT_T(KC_R),  LCTL_T(KC_S),  LSFT_T(KC_T),     KC_G,                                KC_M,     RSFT_T(KC_N),  RCTL_T(KC_E),  RALT_T(KC_I),  RGUI_T(KC_O),
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+         TD(UNDO_Z),    TD(CUT_X),        KC_C,          KC_D,      TD(PASTE_V),                            KC_K,          KC_H,        KC_COMM,        KC_DOT,      KC_SLSH,
+    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
                                                     LT(1,KC_BSPC),    KC_TAB,                              KC_ENT,     LT(2,KC_SPC)
                                                  //`--------------+--------------'                    `--------------+--------------'
     ),
 
-[NMBRLYR] = LAYOUT_reviung34(
+[WINNMBRLYR] = LAYOUT_reviung34(
     //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
             KC_1,          KC_2,          KC_3,          KC_4,          KC_5,                               KC_6,          KC_7,          KC_8,         KC_9,          KC_0,
     //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
           KC_LGUI,       KC_LALT,       KC_LCTL,        KC_LSFT,       KC_GRV,                             KC_SCLN,       KC_RSFT,       KC_RCTL,      KC_RALT,       KC_RGUI,
     //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
           KC_BSLS,       KC_LBRC,       KC_LCBR,        KC_MINS,       KC_EQL,                             KC_PLUS,       KC_UNDS,       KC_RCBR,      KC_RBRC,       KC_PIPE,
-    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------' 
+    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
                                                         KC_TRNS,       KC_NO,                              KC_COMM,    LT(4,KC_DOT)
                                                  //`--------------+--------------'                    `--------------+--------------'
     ),
 
-[CLMKARR] = LAYOUT_reviung34(
+[WINCLMKARR] = LAYOUT_reviung34(
     //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
-            KC_F1,        KC_F2,         KC_F3,         KC_F4,         KC_F5,                               KC_F6,         KC_F7,         KC_F8,        KC_F9,        KC_F10, 
-    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
-           KC_LGUI,      KC_LALT,       KC_LCTL,       KC_LSFT,        KC_F11,                              KC_F12,       KC_LEFT,       KC_DOWN,       KC_UP,        KC_RGHT, 
-    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
-            KC_ESC,       TO(3),        KC_VOLD,       KC_VOLU,       KC_MUTE,                              KC_CAPS,      KC_HOME,       KC_PGDN,      KC_PGUP,       KC_END, 
+            KC_F1,        KC_F2,         KC_F3,         KC_F4,         KC_F5,                               KC_F6,         KC_F7,         KC_F8,        KC_F9,        KC_F10,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+           KC_LGUI,      KC_LALT,       KC_LCTL,       KC_LSFT,        KC_F11,                              KC_F12,       KC_LEFT,       KC_DOWN,       KC_UP,        KC_RGHT,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+            KC_ESC,       TO(3),        KC_VOLD,       KC_VOLU,       KC_MUTE,                              KC_CAPS,      KC_HOME,       KC_PGDN,      KC_PGUP,       KC_END,
     //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
-                                                     LT(4,KC_DEL),    KC_INS,                                KC_NO,       KC_TRNS 
+                                                     LT(4,KC_DEL),    KC_INS,                                KC_NO,       KC_TRNS
                                                  //`--------------+--------------'                    `--------------+--------------'
     ),
 
-[QWERTY] = LAYOUT_reviung34(
+[WINQWERTY] = LAYOUT_reviung34(
     //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
-         TD(COPY_Q),       KC_W,          KC_E,          KC_R,         KC_T,                                KC_Y,         KC_U,          KC_I,          KC_O,          KC_P, 
+         TD(COPY_Q),       KC_W,          KC_E,          KC_R,         KC_T,                                KC_Y,         KC_U,          KC_I,          KC_O,          KC_P,
     //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
         LGUI_T(KC_A),  LALT_T(KC_S),  LCTL_T(KC_D),  LSFT_T(KC_F),     KC_G,                                KC_H,     RSFT_T(KC_J),  RCTL_T(KC_K),  RALT_T(KC_L), RGUI_T(KC_QUOT),
     //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
-         TD(UNDO_Z),    TD(CUT_X),        KC_C,      TD(PASTE_V),      KC_B,                                KC_N,         KC_M,         KC_COMM,       KC_DOT,        KC_SLSH,  
+         TD(UNDO_Z),    TD(CUT_X),        KC_C,      TD(PASTE_V),      KC_B,                                KC_N,         KC_M,         KC_COMM,       KC_DOT,        KC_SLSH,
     //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
                                                     LT(1,KC_BSPC),    KC_TAB,                              KC_ENT,     LT(5,KC_SPC)
                                                  //`--------------+--------------'                    `--------------+--------------'
     ),
 [WINMISC] = LAYOUT_reviung34(
     //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
-            TO(0),         TO(0),         TO(6),       N_TILDE,    N_CAPS_TILDE,                           KC_BTN3,      KC_BTN1,       KC_BTN2,       KC_BTN4,       KC_BTN5, 
+            TO(0),         TO(0),         TO(6),       N_TILDE,    N_CAPS_TILDE,                           KC_BTN3,      KC_BTN1,       KC_BTN2,       KC_BTN4,       KC_BTN5,
     //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
-       LGUI(KC_LEFT),    KC_MPRV,       KC_MPLY,       KC_MNXT,    LGUI(KC_RGHT),                          KC_BRIU,      KC_MS_L,       KC_MS_D,       KC_MS_U,       KC_MS_R,  
+       LGUI(KC_LEFT),    KC_MPRV,       KC_MPLY,       KC_MNXT,    LGUI(KC_RGHT),                          KC_BRIU,      KC_MS_L,       KC_MS_D,       KC_MS_U,       KC_MS_R,
     //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
-         LGUI(KC_E),    LGUI(KC_I),    LGUI(KC_L),   SGUI(KC_S),     LGUI(KC_V),                           KC_BRID,      KC_WH_L,       KC_WH_D,       KC_WH_U,       KC_WH_R,  
+         LGUI(KC_E),    LGUI(KC_I),    LGUI(KC_L),   SGUI(KC_S),     LGUI(KC_V),                           KC_BRID,      KC_WH_L,       KC_WH_D,       KC_WH_U,       KC_WH_R,
     //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
-                                                       KC_TRNS,        KC_NO,                               KC_NO,       KC_TRNS 
+                                                       KC_TRNS,        KC_NO,                               KC_NO,       KC_TRNS
                                                  //`--------------+--------------'                    `--------------+--------------'
     ),
-[QWRTARR] = LAYOUT_reviung34(
+[WINQWRTARR] = LAYOUT_reviung34(
     //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
-            KC_F1,        KC_F2,         KC_F3,         KC_F4,         KC_F5,                               KC_F6,         KC_F7,         KC_F8,        KC_F9,        KC_F10, 
-    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
-           KC_LGUI,      KC_LALT,       KC_LCTL,       KC_LSFT,        KC_F11,                              KC_F12,       KC_LEFT,       KC_DOWN,       KC_UP,        KC_RGHT, 
-    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
-            KC_ESC,       TO(0),        KC_VOLD,       KC_VOLU,       KC_MUTE,                              KC_CAPS,      KC_HOME,       KC_PGDN,      KC_PGUP,       KC_END, 
+            KC_F1,        KC_F2,         KC_F3,         KC_F4,         KC_F5,                               KC_F6,         KC_F7,         KC_F8,        KC_F9,        KC_F10,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+           KC_LGUI,      KC_LALT,       KC_LCTL,       KC_LSFT,        KC_F11,                              KC_F12,       KC_LEFT,       KC_DOWN,       KC_UP,        KC_RGHT,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+            KC_ESC,       TO(0),        KC_VOLD,       KC_VOLU,       KC_MUTE,                              KC_CAPS,      KC_HOME,       KC_PGDN,      KC_PGUP,       KC_END,
     //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
-                                                     LT(4,KC_DEL),    KC_INS,                                KC_NO,       KC_TRNS 
+                                                     LT(4,KC_DEL),    KC_INS,                                KC_NO,       KC_TRNS
                                                  //`--------------+--------------'                    `--------------+--------------'
     ),
+
+[LINCOLEMAK] = LAYOUT_reviung34(
+    //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
+         TD(COPY_Q),       KC_W,          KC_F,          KC_P,         KC_B,                                KC_J,          KC_L,          KC_U,         KC_Y,        KC_QUOT,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+        LGUI_T(KC_A),  LALT_T(KC_R),  LCTL_T(KC_S),  LSFT_T(KC_T),     KC_G,                                KC_M,     RSFT_T(KC_N),  RCTL_T(KC_E),  RALT_T(KC_I),  RGUI_T(KC_O),
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+         TD(UNDO_Z),    TD(CUT_X),        KC_C,          KC_D,      TD(PASTE_V),                            KC_K,          KC_H,        KC_COMM,        KC_DOT,      KC_SLSH,
+    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
+                                                    LT(1,KC_BSPC),    KC_TAB,                              KC_ENT,     LT(2,KC_SPC)
+                                                 //`--------------+--------------'                    `--------------+--------------'
+    ),
+
+[LINNMBRLYR] = LAYOUT_reviung34(
+    //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
+            KC_1,          KC_2,          KC_3,          KC_4,          KC_5,                               KC_6,          KC_7,          KC_8,         KC_9,          KC_0,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+          KC_LGUI,       KC_LALT,       KC_LCTL,        KC_LSFT,       KC_GRV,                             KC_SCLN,       KC_RSFT,       KC_RCTL,      KC_RALT,       KC_RGUI,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+          KC_BSLS,       KC_LBRC,       KC_LCBR,        KC_MINS,       KC_EQL,                             KC_PLUS,       KC_UNDS,       KC_RCBR,      KC_RBRC,       KC_PIPE,
+    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
+                                                        KC_TRNS,       KC_NO,                              KC_COMM,    LT(4,KC_DOT)
+                                                 //`--------------+--------------'                    `--------------+--------------'
+    ),
+
+[LINARR] = LAYOUT_reviung34(
+    //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
+            KC_F1,        KC_F2,         KC_F3,         KC_F4,         KC_F5,                               KC_F6,         KC_F7,         KC_F8,        KC_F9,        KC_F10,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+           KC_LGUI,      KC_LALT,       KC_LCTL,       KC_LSFT,        KC_F11,                              KC_F12,       KC_LEFT,       KC_DOWN,       KC_UP,        KC_RGHT,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+            KC_ESC,       TO(3),        KC_VOLD,       KC_VOLU,       KC_MUTE,                              KC_CAPS,      KC_HOME,       KC_PGDN,      KC_PGUP,       KC_END,
+    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
+                                                     LT(4,KC_DEL),    KC_INS,                                KC_NO,       KC_TRNS
+                                                 //`--------------+--------------'                    `--------------+--------------'
+    ),
+
 [LOLGAME] = LAYOUT_reviung34(
     //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
-            KC_1,        KC_2,         KC_3,         KC_4,         KC_5,                               KC_ESC,         KC_RALT,         KC_GRV,        LCTL(KC_1),        LCTL(KC_2), 
-    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
-           KC_Q,      KC_W,       KC_E,       KC_R,        KC_T,                              KC_TAB,      KC_VOLD,       KC_VOLU,      LCTL(KC_3),         LCTL(KC_4), 
-    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
-            KC_A,       KC_S,        KC_D,       KC_F,       KC_B,                              KC_P,      KC_MPRV,       KC_MPLY,       KC_MNXT,    LCTL(KC_5), 
+            KC_1,        KC_2,         KC_3,         KC_4,         KC_5,                               KC_ESC,         KC_RALT,         KC_GRV,        LCTL(KC_1),        LCTL(KC_2),
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+           KC_Q,      KC_W,       KC_E,       KC_R,        KC_T,                              KC_TAB,      KC_VOLD,       KC_VOLU,      LCTL(KC_3),         LCTL(KC_4),
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+            KC_A,       KC_S,        KC_D,       KC_F,       KC_B,                              KC_P,      KC_MPRV,       KC_MPLY,       KC_MNXT,    LCTL(KC_5),
     //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
-                                                     KC_SPC,    KC_LCTL,                                TD(CHAT),       TO(0) 
+                                                     KC_SPC,    KC_LCTL,                                TD(CHAT),       TO(0)
                                                  //`--------------+--------------'                    `--------------+--------------'
     ),
 [LOLCHAT] = LAYOUT_reviung34(
     //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
-         TD(COPY_Q),       KC_W,          KC_F,          KC_P,         KC_B,                                KC_J,          KC_L,          KC_U,         KC_Y,        KC_QUOT, 
-    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
-        LGUI_T(KC_A),  LALT_T(KC_R),  LCTL_T(KC_S),  LSFT_T(KC_T),     KC_G,                                KC_M,     RSFT_T(KC_N),  RCTL_T(KC_E),  RALT_T(KC_I),  RGUI_T(KC_O), 
-    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------| 
-         TD(UNDO_Z),    TD(CUT_X),        KC_C,          KC_D,      TD(PASTE_V),                            KC_K,          KC_H,        KC_COMM,        KC_DOT,      KC_SLSH, 
-    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------' 
+         TD(COPY_Q),       KC_W,          KC_F,          KC_P,         KC_B,                                KC_J,          KC_L,          KC_U,         KC_Y,        KC_QUOT,
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+        LGUI_T(KC_A),  LALT_T(KC_R),  LCTL_T(KC_S),  LSFT_T(KC_T),     KC_G,                                KC_M,     RSFT_T(KC_N),  RCTL_T(KC_E),  RALT_T(KC_I),  RGUI_T(KC_O),
+    //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
+         TD(UNDO_Z),    TD(CUT_X),        KC_C,          KC_D,      TD(PASTE_V),                            KC_K,          KC_H,        KC_COMM,        KC_DOT,      KC_SLSH,
+    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
                                                     LT(8,KC_BSPC),    KC_TAB,                              GAME,     LT(2,KC_SPC)
                                                  //`--------------+--------------'                    `--------------+--------------'
     ),
@@ -165,7 +211,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
           KC_LGUI,       KC_LALT,       KC_LCTL,        KC_LSFT,       KC_GRV,                             KC_SCLN,       KC_RSFT,       KC_RCTL,      KC_RALT,       KC_RGUI,
     //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
           KC_BSLS,       KC_LBRC,       KC_LCBR,        KC_MINS,       KC_EQL,                             KC_PLUS,       KC_UNDS,       KC_RCBR,      KC_RBRC,       KC_PIPE,
-    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------' 
+    //`--------------+--------------+--------------+--------------+--------------'                    `--------------+--------------+--------------+--------------+--------------'
                                                         KC_TRNS,       KC_NO,                              KC_COMM,    LT(4,KC_DOT)
                                                  //`--------------+--------------'                    `--------------+--------------'
     ),
@@ -202,7 +248,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record){
                 unregister_code(KC_LALT);
             break;
         case GAME:
-            if (record->event.pressed) 
+            if (record->event.pressed)
             {
                 register_code16(KC_ENT);
                 layer_off(7);
@@ -230,7 +276,7 @@ uint8_t  current_idle_frame = 0;
 uint8_t current_tap_frame = 0;
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    return OLED_ROTATION_180;  
+    return OLED_ROTATION_180;
 }
 
 static void render_anim(void) {
@@ -304,12 +350,12 @@ bool oled_task_user() {
     render_anim();
 
     oled_set_cursor(0,0);
-    if (get_highest_layer(layer_state) == COLEMAK || get_highest_layer(layer_state) == NMBRLYR || get_highest_layer(layer_state) == CLMKARR || get_highest_layer(layer_state) == QWERTY || get_highest_layer(layer_state) == WINMISC || get_highest_layer(layer_state) == QWRTARR)
-        oled_write("Windows", false); 
+    if (get_highest_layer(layer_state) == WINCOLEMAK || get_highest_layer(layer_state) == WINNMBRLYR || get_highest_layer(layer_state) == WINCLMKARR || get_highest_layer(layer_state) == QWERTY || get_highest_layer(layer_state) == WINMISC || get_highest_layer(layer_state) == QWRTARR)
+        oled_write("Windows", false);
 
     oled_set_cursor(0, 1);
     switch (get_highest_layer(layer_state)) {
-        case COLEMAK :
+        case WINCOLEMAK :
             oled_write("Main", false);
             break;
         case NMBRLYR :
@@ -336,19 +382,20 @@ bool oled_task_user() {
         case LOLNUM :
             oled_write("Num Chat", false);
             break;
-    }              
+    }
 
-    led_t led_state = host_keyboard_led_state(); 
+    led_t led_state = host_keyboard_led_state();
     oled_set_cursor(0, 2);
     oled_write_P(led_state.caps_lock ? PSTR("CAPS") : PSTR("       "), false);
 
-    oled_set_cursor(18,2);
-    sprintf(wpm_str, "%03d", get_current_wpm());
-    oled_write(wpm_str, false);
-    oled_set_cursor(18,3);
-    oled_write("WPM", false);
+    if (get_highest_layer(layer_state) != LOLGAME || get_highest_layer(layer_state) != LOLCHAT || get_highest_layer(layer_state) != LOLNUM)
+        oled_set_cursor(18,2);
+        sprintf(wpm_str, "%03d", get_current_wpm());
+        oled_write(wpm_str, false);
+        oled_set_cursor(18,3);
+        oled_write("WPM", false);
 
-    oled_set_cursor(0, 3);
+       oled_set_cursor(0, 3);
     switch (get_highest_layer(layer_state)) {
         case COLEMAK :
             oled_write("Colemak", false);
@@ -356,7 +403,7 @@ bool oled_task_user() {
         case QWERTY :
             oled_write("Qwerty", false);
             break;
-    }              
+    }
 
     return false;
 }
