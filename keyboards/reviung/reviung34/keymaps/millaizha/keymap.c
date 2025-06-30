@@ -158,7 +158,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                  //`--------------+--------------'                    `--------------+--------------'
     ),
 
-[LINNMBRLYR] = LAYOUT_reviung34(
+[LINNMBLYR] = LAYOUT_reviung34(
     //,--------------------------------------------------------------------------.                    ,--------------------------------------------------------------------------.
             KC_1,          KC_2,          KC_3,          KC_4,          KC_5,                               KC_6,          KC_7,          KC_8,         KC_9,          KC_0,
     //|--------------+--------------+--------------+--------------+--------------|                    |--------------+--------------+--------------+--------------+--------------|
@@ -350,7 +350,7 @@ bool oled_task_user() {
     render_anim();
 
     oled_set_cursor(0,0);
-    if (get_highest_layer(layer_state) == WINCOLEMAK || get_highest_layer(layer_state) == WINNMBRLYR || get_highest_layer(layer_state) == WINCLMKARR || get_highest_layer(layer_state) == QWERTY || get_highest_layer(layer_state) == WINMISC || get_highest_layer(layer_state) == QWRTARR)
+    if (get_highest_layer(layer_state) == WINCOLEMAK || get_highest_layer(layer_state) == WINNMBRLYR || get_highest_layer(layer_state) == WINCLMKARR || get_highest_layer(layer_state) == WINQWERTY || get_highest_layer(layer_state) == WINMISC || get_highest_layer(layer_state) == WINQWRTARR)
         oled_write("Windows", false);
 
     oled_set_cursor(0, 1);
@@ -358,19 +358,19 @@ bool oled_task_user() {
         case WINCOLEMAK :
             oled_write("Main", false);
             break;
-        case NMBRLYR :
+        case WINNMBRLYR :
             oled_write("Number", false);
             break;
-        case CLMKARR :
+        case WINCLMKARR :
             oled_write("Function", false);
             break;
-        case QWERTY :
+        case WINQWERTY :
             oled_write("Main", false);
             break;
         case WINMISC :
             oled_write("Mouse/Media", false);
             break;
-        case QWRTARR :
+        case WINQWRTARR :
             oled_write("Function", false);
             break;
         case LOLGAME :
@@ -388,7 +388,8 @@ bool oled_task_user() {
     oled_set_cursor(0, 2);
     oled_write_P(led_state.caps_lock ? PSTR("CAPS") : PSTR("       "), false);
 
-    if (get_highest_layer(layer_state) != LOLGAME || get_highest_layer(layer_state) != LOLCHAT || get_highest_layer(layer_state) != LOLNUM)
+    if (get_highest_layer(layer_state) != LOLGAME || get_highest_layer(layer_state) != LOLCHAT || get_highest_layer(layer_state) != LOLNUM){
+
         oled_set_cursor(18,2);
         sprintf(wpm_str, "%03d", get_current_wpm());
         oled_write(wpm_str, false);
@@ -397,12 +398,13 @@ bool oled_task_user() {
 
        oled_set_cursor(0, 3);
     switch (get_highest_layer(layer_state)) {
-        case COLEMAK :
+        case WINCOLEMAK :
             oled_write("Colemak", false);
             break;
-        case QWERTY :
+        case WINQWERTY :
             oled_write("Qwerty", false);
             break;
+    }
     }
 
     return false;
