@@ -33,7 +33,7 @@
 #define GUI_O RGUI_T(KC_O)
 
 // Layer-tap mods
-#define ESC_1 LT(5,KC_ESC)
+#define ESC_1 LT(1,KC_ESC)
 #define BSPC_2 LT(2,KC_BSPC)
 #define TAB_3 LT(3,KC_TAB)
 #define SPC_4 LT(4,KC_SPC)
@@ -63,6 +63,18 @@ typedef struct
     int state;
 } td_tap_t;
 
+// Tap dance and custom keycodes declarations
+enum 
+{
+    TD_COPY_Q,
+    TD_CUT_X,
+    TD_PASTE_V,
+    TD_UNDO_Z,
+    TD_LOL_T_DANCE,
+    TD_GAME_CHAT,
+    TD_COUNT
+};
+
 enum custom_keycodes 
 {
     LAYER0 = SAFE_RANGE,
@@ -75,18 +87,7 @@ enum custom_keycodes
     LAYER7,
     LAYER8,
     LAYER9,
-};
-
-// Tap dance and custom keycodes declarations
-enum 
-{
-    COPY_Q,
-    CUT_X,
-    PASTE_V,
-    UNDO_Z,
-    BSPC_T_DANCE,
-    LOL_T_DANCE,
-    GAME_CHAT,
+    
     GAME
 };
 
@@ -181,20 +182,20 @@ void td_lol_reset(tap_dance_state_t *state, void *user_data)
 };
 
 // Tap dance definitions
-tap_dance_action_t tap_dance_actions[] = 
+tap_dance_action_t tap_dance_actions[TD_COUNT] = 
 {
     // Tap once for Q, twice for Copy
-    [COPY_Q] = ACTION_TAP_DANCE_DOUBLE(KC_Q, LCTL(KC_C)),
+    [TD_COPY_Q] = ACTION_TAP_DANCE_DOUBLE(KC_Q, LCTL(KC_C)),
     // Tap once for X, twice for Cut
-    [CUT_X] = ACTION_TAP_DANCE_DOUBLE(KC_X, LCTL(KC_X)),
+    [TD_CUT_X] = ACTION_TAP_DANCE_DOUBLE(KC_X, LCTL(KC_X)),
     // Tap once for V, twice for Paste
-    [PASTE_V] = ACTION_TAP_DANCE_DOUBLE(KC_V, LCTL(KC_V)),
+    [TD_PASTE_V] = ACTION_TAP_DANCE_DOUBLE(KC_V, LCTL(KC_V)),
     // Tap once for Z, twice for Undo
-    [UNDO_Z] = ACTION_TAP_DANCE_DOUBLE(KC_Z, LCTL(KC_Z)),
+    [TD_UNDO_Z] = ACTION_TAP_DANCE_DOUBLE(KC_Z, LCTL(KC_Z)),
     // Tap once for Enter, twice for Shift + Enter
-    [GAME_CHAT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_game_chat_finished, td_game_chat_reset),
+    [TD_GAME_CHAT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_game_chat_finished, td_game_chat_reset),
     // Tap once for P, twice for Escape. Hold for Tab, tap + hold for MO(10)
-    [LOL_T_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_lol_finished, td_lol_reset),
+    [TD_LOL_T_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_lol_finished, td_lol_reset),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = 
@@ -202,11 +203,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
 
   [_LAYER0] = LAYOUT_split_3x6_3(
         //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-             KC_NO,TD(COPY_Q), KC_W,    KC_F,    KC_P,    KC_B,                         KC_J,    KC_L,    KC_U,    KC_Y,  KC_QUOT,  KC_NO, 
+             KC_NO,TD(TD_COPY_Q),KC_W, KC_F,    KC_P,    KC_B,                         KC_J,    KC_L,    KC_U,    KC_Y,   KC_QUOT,  KC_NO, 
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-             KC_NO,   GUI_A,   ALT_R,   CTL_S,  SHFT_T,   KC_G,                         KC_M,    SFT_N,   CTL_E,   ALT_I,  GUI_O,   KC_NO, 
+             KC_NO,   GUI_A,   ALT_R,   CTL_S,  SHFT_T,  KC_G,                         KC_M,    SFT_N,   CTL_E,   ALT_I,   GUI_O,   KC_NO, 
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-             KC_NO,TD(UNDO_Z),TD(CUT_X),  KC_C,  KC_D, TD(PASTE_V),                     KC_K,    KC_H,  KC_COMM,  KC_DOT, KC_SLSH,  KC_NO, 
+             KC_NO,TD(TD_UNDO_Z),TD(TD_CUT_X),  KC_C,    KC_D, TD(TD_PASTE_V),         KC_K,    KC_H,  KC_COMM,  KC_DOT,  KC_SLSH,  KC_NO, 
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                                   ESC_1, BSPC_2, TAB_3,       KC_ENT,  SPC_4,    DEL_5
                                             //`--------------------------'  `--------------------------'
@@ -257,13 +258,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     ),
     [_LAYER5] = LAYOUT_split_3x6_3(
         //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-             KC_NO, MS_ACL0,  KC_NO,  MS_BTN5, MS_BTN4,  KC_NO,                     MS_WHLU,  KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, 
+             KC_NO, MS_ACL0,  KC_NO,  MS_BTN4, MS_BTN5,  KC_NO,                       MS_WHLU,  KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, 
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-             KC_NO, MS_ACL1, MS_BTN3, MS_BTN2, MS_BTN1,  KC_NO,                   MS_WHLD, MS_LEFT, MS_UP, MS_DOWN, MS_RGHT, KC_NO, 
+             KC_NO, MS_ACL1, MS_BTN3, MS_BTN2, MS_BTN1,  KC_NO,                       MS_WHLD, MS_LEFT, MS_DOWN,  MS_UP,  MS_RGHT,  KC_NO, 
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-             KC_NO, MS_ACL2, MS_BTN6, MS_BTN7, MS_BTN8,  KC_NO,                   KC_NO, MS_WHLL, MS_WHLR, KC_NO,   KC_NO,   KC_NO, 
+             KC_NO, MS_ACL2, MS_BTN6, MS_BTN7, MS_BTN8,  KC_NO,                        KC_NO,  MS_WHLL, MS_WHLR,  KC_NO,   KC_NO,   KC_NO, 
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                               KC_TRNS, KC_LCTL, KC_LSFT,       KC_NO, KC_NO, KC_TRNS
+                                               KC_LALT, KC_LCTL, KC_LSFT,       KC_NO, KC_NO, KC_TRNS
                                             //`--------------------------'  `--------------------------'
     ),
     [_LAYER6] = LAYOUT_split_3x6_3(
@@ -274,7 +275,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
              KC_NO,   KC_A,   KC_S,     KC_D,    KC_F,    KC_B,                        KC_NO,  KC_VOLD, KC_VOLU,  KC_NO,   KC_NO,   KC_NO, 
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                         TD(LOL_T_DANCE), KC_SPC, KC_LCTL, TD(GAME_CHAT), LALT(KC_Z), TO(0)
+                                         TD(TD_LOL_T_DANCE), KC_SPC, KC_LCTL, TD(TD_GAME_CHAT), LALT(KC_Z), TO(0)
                                             //`--------------------------'  `--------------------------'
     ),
     [_LAYER7] = LAYOUT_split_3x6_3(
@@ -283,7 +284,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
              KC_NO,   GUI_A,   ALT_R,   CTL_S,  SHFT_T,   KC_G,                         KC_M,    SFT_N,   CTL_E,   ALT_I,  GUI_O,   KC_NO, 
         //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-             KC_NO,   KC_Z,    KC_X, TD(COPY_Q), KC_D, TD(PASTE_V),                     KC_K,    KC_H,  KC_COMM, KC_DOT,  KC_SLSH,  KC_NO, 
+             KC_NO,   KC_Z,    KC_X, TD(TD_COPY_Q), KC_D, TD(TD_PASTE_V),                     KC_K,    KC_H,  KC_COMM, KC_DOT,  KC_SLSH,  KC_NO, 
         //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                                KC_LSFT,  BSPC_8, KC_TAB,       GAME,   KC_SPC, KC_CAPS
                                             //`--------------------------'  `--------------------------'
